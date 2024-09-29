@@ -1,66 +1,68 @@
-## Foundry
+# Linear Bonding Curve Token
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Overview
 
-Foundry consists of:
+`LinearBondingCurveToken` is an ERC-20 token implemented with a linear bonding curve, allowing users to buy and sell tokens with dynamic pricing based on supply. The token supports a pool balance and can be traded for ETH through the contract. The implementation is built using Solidity and includes reentrancy protection.
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Features
 
-## Documentation
+- **ERC-20 Compliance**: The token adheres to the standard ERC-20 interface.
+- **Linear Bonding Curve**: Token pricing is based on a linear bonding curve, where the price increases or decreases depending on the current token supply.
+- **CoolDown Period**: To prevent frequent trading, a cooldown period is enforced between purchases and sales.
+- **Reentrancy Guard**: Protects the contract from reentrancy attacks, ensuring secure transactions.
 
-https://book.getfoundry.sh/
+## Technology
 
-## Usage
+The token is written in Solidity 0.8.20, using OpenZeppelin’s standard libraries for ERC-20 compliance and reentrancy protection.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js and npm
+- Foundry (for local deployment and testing)
+
+### Installation
+
+Install Foundry if it’s not already installed:
+
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
+```
+
+### Clone the repository
+
+```bash
+git clone https://github.com/evgenii-kireev/linear-bonding-curve-token.git
+cd linear-bonding-curve-token
+```
+
+### Install dependencies
+
+```bash
+forge install
+```
 
 ### Build
 
-```shell
-$ forge build
+```bash
+forge build
 ```
 
 ### Test
-
-```shell
-$ forge test
+```bash
+forge test
 ```
 
-### Format
+## Contributing
 
-```shell
-$ forge fmt
-```
+Contributions are welcome! Please fork the repository and open a pull request with your features or fixes.
 
-### Gas Snapshots
+## License
 
-```shell
-$ forge snapshot
-```
+This project is unlicensed and free for use by anyone.
 
-### Anvil
+This README provides a comprehensive guide tailored to the `SupremeToken` and its unique features, ensuring users and developers can easily understand and interact with the token.
 
-```shell
-$ anvil
-```
 
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
