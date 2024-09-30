@@ -34,7 +34,7 @@ foundryup
 ### Clone the repository
 
 ```bash
-git clone https://github.com/evgenii-kireev/linear-bonding-curve-token.git
+git clone https://github.com/jocoders/linear-bonding-curve-token.git
 cd linear-bonding-curve-token
 ```
 
@@ -51,6 +51,7 @@ forge build
 ```
 
 ### Test
+
 ```bash
 forge test
 ```
@@ -64,5 +65,3 @@ Contributions are welcome! Please fork the repository and open a pull request wi
 This project is unlicensed and free for use by anyone.
 
 This README provides a comprehensive guide tailored to the `SupremeToken` and its unique features, ensuring users and developers can easily understand and interact with the token.
-
-
