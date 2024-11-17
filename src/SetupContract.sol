@@ -107,14 +107,4 @@ contract SetupContract {
         assert(address(this).balance == echidnaBalanceEth);
         assert(token.balanceOf(address(this)) == echidnaBalanceToken);
     }
-
-    function sqrt(uint256 x) private pure returns (uint256) {
-        uint256 z = (x + 1) / 2;
-        uint256 y = x;
-        while (z < y) {
-            y = z;
-            z = (x / z + z) / 2;
-        }
-        return y;
-    }
 }
