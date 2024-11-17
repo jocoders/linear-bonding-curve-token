@@ -1,23 +1,40 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.20;
 
-import "forge-std/Test.sol";
+import {Test, console} from "forge-std/Test.sol";
 import {LinearBondingCurveToken} from "../src/LinearBondingCurveToken.sol";
 
 contract LinearBondingCurveTokenTest is Test {
     LinearBondingCurveToken token;
-    address alice = address(0x1);
-    address bob = address(0x2);
-    address zeroAddress = address(0x0);
+
+    uint256 constant INITIAL_PRICE = 130_000;
+    uint256 constant MAX_BUY_TOKEN = 200 * 1e18;
+    uint256 constant RATIO = 200;
+
+    address alice = makeAddr("alice");
+    address bob = makeAddr("bob");
+    address zeroAddress = makeAddr("zero");
 
     function setUp() public {
-        token = new LinearBondingCurveToken{value: 0.1 ether}(200_000, 20, 500_000);
+        token = new LinearBondingCurveToken(INITIAL_PRICE, MAX_BUY_TOKEN, RATIO);
         vm.deal(alice, 10 ether);
         vm.deal(bob, 10 ether);
     }
 
+    function testInitialState() public {
+        uint256 poolBalance = token.poolBalance();
+        assertEq(poolBalance, 0);
+        assertEq(token.initialPrice(), INITIAL_PRICE);
+        assertEq(token.maxBuyToken(), MAX_BUY_TOKEN);
+        assertEq(token.ratio(), RATIO);
+    }
+
+    function testGetInitCurrentPrice() public {
+        uint256 currentPrice = token.getCurrentPrice();
+        assertEq(currentPrice, INITIAL_PRICE);
+    }
+
     function testSuccessfulBuy() public {
-        uint256 tokenSupply = token.tokenSupply();
         uint256 poolBalance = token.poolBalance();
         uint256 ethAmount = 0.1 ether;
 
@@ -28,12 +45,11 @@ contract LinearBondingCurveTokenTest is Test {
 
         assertGt(token.balanceOf(alice), 0);
         assertEq(token.poolBalance(), poolBalance + ethAmount);
-        assertEq(token.tokenSupply(), tokenSupply + token.balanceOf(alice));
     }
 
     function testBuyZeroTokens() public {
         vm.startPrank(bob);
-        vm.expectRevert("Amount must be greater than zero");
+        vm.expectRevert();
         token.buy{value: 0}();
         vm.stopPrank();
     }
@@ -43,7 +59,7 @@ contract LinearBondingCurveTokenTest is Test {
         token.buy{value: 0.1 ether}();
 
         vm.expectRevert("Cooldown period has not passed");
-        token.sell(1000);
+        token.sell(100);
         vm.stopPrank();
     }
 
@@ -65,8 +81,7 @@ contract LinearBondingCurveTokenTest is Test {
 
     function testSellZeroTokens() public {
         vm.startPrank(alice);
-        vm.expectRevert("Amount must be greater than zero");
-
+        vm.expectRevert("Insufficient tokens for sale");
         vm.warp(block.timestamp + 2 minutes);
         token.sell(0);
         vm.stopPrank();

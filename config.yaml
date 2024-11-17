@@ -1,0 +1,3 @@
+target: SetupContract
+testLimit: 50000
+balanceContract: 100000000000000000000
